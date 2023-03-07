@@ -7,4 +7,11 @@
     {% csrf_token %}
     {{pizzaform}}
     <input type="submit" value = "Order pizza">
+</form>
+<br><br>
+Want more than one pizza?
+<form action="{% url 'pizzas' %}" method="GET">
+    {{multiple_form}}
+    <input type="submit" value = "Get pizzas.">
+</form>
     {% endblock %}
