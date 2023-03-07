@@ -40,13 +40,13 @@ def pizzas(request):
     PizzaFormSet = formset_factory(forms.PizzaForm, extra = number_of_pizzas)
     formset = PizzaFormSet()
     if request.method == 'POST':
-        filled_formset = forms.PizzaForm(request.POST)
+        filled_formset = PizzaFormSet(request.POST)
         if filled_formset.is_valid():
             for form in filled_formset:
                 print(form.cleaned_data['topping1'])
             note = 'Pizzas have been ordered.'
         else:
-            note = 'Order was note created, please try again.'
+            note = 'Order was not created, please try again.'
             return render(request, 'pizza/pizzas.html', {'note': note, 'formset': formset})
     else:
         return render(request, 'pizza/pizzas.html', {'formset': formset})
@@ -59,10 +59,6 @@ def edit_order(request, pk):
         if filled_form.is_valid():
             filled_form.save()
             form = filled_form
-            context = {
-                'pizzaform': form,
-                'pizza': pizza
-            }
-            note = 'Order has been updated.'
-            return render(request, 'pizza/edit_order.html', context, {'note': note})
-    return render(request, 'pizza/edit_order', context)
+            note = 'Order has been updated'
+            return render(request, 'pizza/edit_order.html', {'note': note, 'pizzaform': form, 'pizza': pizza})
+    return render(request, 'pizza/edit_order.html', {'pizzaform': form, 'pizza': pizza})
