@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .forms import PizzaForm
+from pizza import forms
 
 # Create your views here.
 def home(request):
@@ -7,19 +7,19 @@ def home(request):
 
 def order(request):
     if request.method == 'POST':
-        filled_form = PizzaForm(request.POST)
+        filled_form = forms.PizzaForm(request.POST)
         if filled_form.is_valid():
             note = 'Thanks for ordering! Your %s %s and %s pizza is on its way!' %(filled_form.cleaned_data['size'],
               filled_form.cleaned_data['topping1'],
               filled_form.cleaned_data['topping2'])
-            new_form = PizzaForm()
+            new_form = forms.PizzaForm()
             context = {
                 'pizzaform': new_form,
                 'note': note
             }
-            return render(request, 'pizza\order.html', context)
+            return render(request, 'pizza/order.html', context)
     else:
-        form = PizzaForm()
+        form = forms.PizzaForm()
         context = {
             'pizzaform': form
         }
