@@ -1,7 +1,7 @@
 from django.db import models
 
 # Create your models here.
-class Sizes(models.Model):
+class Size(models.Model):
     title = models.CharField(max_length=100)
 
     def __str__(self):
