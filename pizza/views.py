@@ -1,6 +1,7 @@
 from django.shortcuts import render
-from pizza import forms
+from pizza import forms, models
 from django.forms import formset_factory
+
 # Create your views here.
 def home(request):
     return render(request, 'pizza/home.html')
@@ -10,12 +11,14 @@ def order(request):
     if request.method == 'POST':
         filled_form = forms.PizzaForm(request.POST)
         if filled_form.is_valid():
-            filled_form.save()
+            created_pizza = filled_form.save()
+            created_pizza_pk = created_pizza.id
             note = 'Thanks for ordering! Your %s %s and %s pizza is on its way!' %(filled_form.cleaned_data['size'],
               filled_form.cleaned_data['topping1'],
               filled_form.cleaned_data['topping2'])
             new_form = forms.PizzaForm()
             context = {
+                'created_pizza_pk': created_pizza_pk,
                 'pizzaform': new_form,
                 'note': note,
                 'multiple_form': multiple_form
@@ -47,3 +50,19 @@ def pizzas(request):
             return render(request, 'pizza/pizzas.html', {'note': note, 'formset': formset})
     else:
         return render(request, 'pizza/pizzas.html', {'formset': formset})
+
+def edit_order(request, pk):
+    pizza = models.Pizza.objects.get(pk = pk)
+    form = forms.PizzaForm(instance = pizza)
+    if request.method == 'POST':
+        filled_form = forms.PizzaForm(request.POST, instance=pizza)
+        if filled_form.is_valid():
+            filled_form.save()
+            form = filled_form
+            context = {
+                'pizzaform': form,
+                'pizza': pizza
+            }
+            note = 'Order has been updated.'
+            return render(request, 'pizza/edit_order.html', context, {'note': note})
+    return render(request, 'pizza/edit_order', context)
