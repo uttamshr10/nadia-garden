@@ -41,7 +41,7 @@ pip install -r requirements.txt
 python manage.py runserver
 ```
 
-7. Open your web browser and visit `http://127.0.0.1:8000/` to access the TODO list application.
+7. Open your web browser and visit `http://127.0.0.1:8000/` to access the Nadia's garden application.
 
 <p align="center"><b>Intro</b></p>
 
